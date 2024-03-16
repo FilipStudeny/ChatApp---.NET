@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\services\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:services\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\database\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:database\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\extensions\\jwtbeareroptionsextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:extensions\\jwtbeareroptionsextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|c:\\users\\filda\\desktop\\.net\\chatapp\\api\\database\\mongosettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235EC2E4-34B2-4206-A7EF-FFAC8D484281}|API.csproj|solutionrelative:database\\mongosettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "JwtBearerOptionsExtension.cs",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Extensions\\JwtBearerOptionsExtension.cs",
+              "RelativeDocumentMoniker": "Extensions\\JwtBearerOptionsExtension.cs",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Extensions\\JwtBearerOptionsExtension.cs",
+              "RelativeToolTip": "Extensions\\JwtBearerOptionsExtension.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T19:29:47.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-15T18:13:04.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAAABkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T18:12:16.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MongoSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Database\\MongoSettings.cs",
+              "RelativeDocumentMoniker": "Database\\MongoSettings.cs",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Database\\MongoSettings.cs",
+              "RelativeToolTip": "Database\\MongoSettings.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T18:12:03.408Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Database\\AppSettings.cs",
+              "RelativeDocumentMoniker": "Database\\AppSettings.cs",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Database\\AppSettings.cs",
+              "RelativeToolTip": "Database\\AppSettings.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T18:11:59.108Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthenticationService.cs",
+              "DocumentMoniker": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Services\\AuthenticationService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthenticationService.cs",
+              "ToolTip": "C:\\Users\\Filda\\Desktop\\.NET\\ChatApp\\API\\Services\\AuthenticationService.cs",
+              "RelativeToolTip": "Services\\AuthenticationService.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAA1wBYAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T18:00:33.99Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
