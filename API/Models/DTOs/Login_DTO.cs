@@ -2,7 +2,7 @@
 {
     public class Login_DTO
     {
-        public string Username = string.Empty;
-        public string Password = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

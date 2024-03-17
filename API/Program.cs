@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using API.Extensions;
+using API.Services;
+using API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//** SERVICES **//
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+//** REPOSITORY **//
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //*** AUTHENTICATION ***//
 builder.Services.AddAuthentication(options =>

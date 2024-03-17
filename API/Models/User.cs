@@ -32,9 +32,9 @@ namespace API.Models
     public class PasswordInfo
     {
         [BsonElement("hash")]
-        public string Hash { get; set; } = string.Empty;
+        public required byte[] Hash { get; set; }
 
         [BsonElement("salt")]
-        public string Salt { get; set; } = string.Empty;
+        public required byte[] Salt { get; set; }
     }
 }
