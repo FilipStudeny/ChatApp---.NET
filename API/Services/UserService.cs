@@ -17,13 +17,11 @@ namespace API.Services
     }
     public class UserService : IUserService
     {
-        private readonly MongoDbContext _database;
         private readonly IAuthenticationService authenticationService;
         private readonly IUserRepository userRepository;
 
-        public UserService(MongoDbContext database, IAuthenticationService authenticationService, IUserRepository userRepository)
+        public UserService(IAuthenticationService authenticationService, IUserRepository userRepository)
         {
-            _database = database;
             this.authenticationService = authenticationService;
             this.userRepository = userRepository;
         }

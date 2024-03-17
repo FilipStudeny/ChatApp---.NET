@@ -35,6 +35,7 @@ namespace API.Services
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Claims = claims,
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature)
             };
 

@@ -1,8 +1,8 @@
 ﻿using API.Models;
 using API.Models.DTOs;
 using API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -14,6 +14,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("/")]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<List<User>>>> GetUsers()
         {
             return await userService.GetUsers();
