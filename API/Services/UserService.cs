@@ -1,4 +1,5 @@
 ﻿using API.Database;
+using API.Extensions;
 using API.Models;
 using API.Models.DTOs;
 using API.Repository;
@@ -37,28 +38,38 @@ namespace API.Services
         }
         public async Task<ServiceResponse<string>> Login(Login_DTO login_DTO)
         {
+            try
+            {
+                User user = await userRepository.GetUser(login_DTO.Username);
+                if (user == null)
+                {
+                    throw new UserNotFoundException("User not found");
+                }
 
-            User user = await userRepository.GetUser(login_DTO.Username);
-            if (user == null)
+                if (!authenticationService.VerifyPasswordHash(login_DTO.Password, user.Password.Hash, user.Password.Salt))
+                {
+                    throw new AuthenticationFailedException("Wrong email or password, try again.");
+                }
+
+                string token = authenticationService.CreateToken(user);
+                return new ServiceResponse<string> { Data = token };
+            }
+            catch (UserNotFoundException ex)
             {
                 return new ServiceResponse<string>
                 {
                     Success = false,
-                    Message = "ERROR: User not found"
+                    Message = ex.Message
                 };
-            }
-
-            if(!authenticationService.VerifyPasswordHash(login_DTO.Password, user.Password.Hash, user.Password.Salt))
+            }catch(AuthenticationFailedException ex)
             {
                 return new ServiceResponse<string>
                 {
                     Success = false,
-                    Message = "ERROR: Wrong password or email address"
+                    Message = ex.Message
                 };
             }
-
-            string token = authenticationService.CreateToken(user);
-            return new ServiceResponse<string> { Data = token };
+           
         }
 
         public async Task<ServiceResponse<bool>> Register(Register_DTO register_DTO)
