@@ -7,7 +7,7 @@ const Layout: React.FunctionComponent = () => {
     return (
         <>
             <Header />
-            <Container maxWidth="lg" sx={{ mt: 10 }}>
+            <Container maxWidth="lg" sx={{ mt: 10,  p: 0 }}>
                 <Outlet />
             </Container>
         </>

@@ -1,22 +1,34 @@
-import { AppBar, Button, Container } from '@mui/material'
+import { AppBar, Button, Container, Link as MuiLink } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Header: React.FunctionComponent = () => {
     return (
-        <AppBar position="fixed">
-            <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'row' }}>
+        <>
+            <AppBar position="fixed">
+                <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                <Button sx={{ m: 1 }} variant='outlined' color='inherit' LinkComponent={Link} href='/'>Home</Button>
+                    <MuiLink underline="none" component={Link} to={'/'} color='inherit'>
+                        <Button sx={{ m: 1 }} variant='outlined' color='inherit'>
+                            Home
+                        </Button>
+                    </MuiLink>
+                    <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 
-                <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button sx={{ m: 1 }} variant='outlined' color='inherit' LinkComponent={Link} href='/login'>Sign in</Button>
-                    <Button sx={{ m: 1 }} variant='outlined' color='inherit' LinkComponent={Link} href='/register'>Sign up</Button>
+                        <MuiLink underline="none" component={Link} to={'/login'} color='inherit'>
+                            <Button sx={{ m: 1 }} variant='outlined' color='inherit'>
+                                Sign in
+                            </Button>
+                        </MuiLink>
+                        <MuiLink underline="none" component={Link} to={'/register'} color='inherit'>
+                            <Button sx={{ m: 1 }} variant='outlined' color='inherit'>
+                                Sign up
+                            </Button>
+                        </MuiLink>
+                    </Container>
                 </Container>
-
-            </Container>
-        </AppBar>
-
+            </AppBar>
+        </>
     )
 }
 

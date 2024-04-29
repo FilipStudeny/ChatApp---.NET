@@ -1,23 +1,24 @@
-import { useState } from 'react';
 import './App.css';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './routes/Layout';
 import Feed from './routes/pages/Feed';
+import LoginPage from './routes/pages/LoginPage';
+import NotFound from './routes/ErrorPages/NotFound';
+import { RegisterPage } from './routes/pages/RegisterPage';
 
 function App() {
 
-    return (
-        <>
+	return (
 		<Routes>
-			<Route element={<Layout/>}>
-				<Route index element={<Feed/>}/>
+			<Route element={<Layout />}>
+				<Route index element={<Feed />} />
+				<Route path='/' element={<Feed />} />
+				<Route path='/login' element={<LoginPage />} />
+				<Route path='/register' element={<RegisterPage />} />
+				<Route path='*' element={<NotFound />} />
 			</Route>
 		</Routes>
-         
-        </>
-    );
+	);
 }
 
 export default App;
