@@ -1,11 +1,12 @@
-import { Container } from "@mui/material";
-
-import UserPanel from "../../components/UserPanel";
 import React from "react";
+import { Container } from "@mui/material";
+import UserPanel from "../../components/UserPanel";
 
-export const Feed: React.FunctionComponent = () => (
+
+const Feed: React.FunctionComponent = () => (
 	<Container sx={{ display: "flex", flexDirection: "row" }}>
-		<UserPanel />
 	</Container>
 );
 
+
+export default Feed

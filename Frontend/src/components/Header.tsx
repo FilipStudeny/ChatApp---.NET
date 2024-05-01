@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Header: React.FunctionComponent = () => {
     return (
         <>
-            <AppBar position="fixed">
+            <AppBar position="fixed" sx={{ height: 60}}>
                 <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'row' }}>
 
                     <MuiLink underline="none" component={Link} to={'/'} color='inherit'>

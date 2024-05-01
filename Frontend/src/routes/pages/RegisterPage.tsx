@@ -10,12 +10,11 @@ import {
 	FormControl,
 	Stack,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import { useState } from "react";
 
 import type React from "react";
 
-export const RegisterPage: React.FunctionComponent = () => {
+const RegisterPage: React.FunctionComponent = () => {
 	const [gender, setGender] = useState<string>("Male");
 
 	const handleOnGenderChange = (event: SelectChangeEvent) => {
@@ -23,39 +22,41 @@ export const RegisterPage: React.FunctionComponent = () => {
 	};
 
 	return (
-		<Container maxWidth="sm" sx={{ m: "auto" }}>
+		<Container maxWidth='sm' sx={{ m: "auto", mt: 5 }}>
 			<form>
-				<Typography color={grey[800]} align="center" variant="h5" component="h5">
+				<Typography color='white' align='center' variant='h5' component='h5'>
 					Create new account
 				</Typography>
-				<TextField sx={{ my: 1 }} fullWidth label="Firstname" variant="standard" />
-				<TextField sx={{ my: 1 }} fullWidth label="Lastname" variant="standard" />
-
-				<TextField sx={{ my: 1 }} fullWidth label="Email" variant="standard" />
-				<TextField sx={{ my: 1 }} fullWidth label="Password" variant="standard" />
-				<TextField sx={{ my: 1 }} fullWidth label="Password repeated" variant="standard" />
-				<Stack direction="row" justifyContent="space-between" sx={{ my: 1 }}>
+				<TextField sx={{ my: 1 }} fullWidth label='Firstname' variant='outlined' />
+				<TextField sx={{ my: 1 }} fullWidth label='Lastname' variant='outlined' />
+				<TextField sx={{ my: 1 }} fullWidth label='Email' variant='outlined' />
+				<TextField sx={{ my: 1 }} fullWidth label='Password' variant='outlined' />
+				<TextField sx={{ my: 1 }} fullWidth label='Password repeated' variant='outlined' />
+				<Stack direction='row' justifyContent='space-between' sx={{ my: 1 }}>
 					<FormControl>
-						<InputLabel id="gender-label">Gender</InputLabel>
+						<InputLabel id='gender-label'>Gender</InputLabel>
 						<Select
-							id="gender-select"
-							labelId="gender-label"
-							label="Gender"
+							id='gender-select'
+							labelId='gender-label'
+							label='Gender'
+							variant='outlined'
 							value={gender}
 							onChange={handleOnGenderChange}
 						>
-							<MenuItem value="Male">Male</MenuItem>
-							<MenuItem value="Female">Female</MenuItem>
+							<MenuItem value='Male'>Male</MenuItem>
+							<MenuItem value='Female'>Female</MenuItem>
 						</Select>
 					</FormControl>
 
-					<TextField label="Age" type="number" InputLabelProps={{ shrink: true }} />
+					<TextField label='Age' type='number' InputLabelProps={{ shrink: true }} />
 				</Stack>
 
-				<Button sx={{ mt: 3, float: "right" }} variant="contained">
+				<Button sx={{ mt: 3, float: "right" }} variant='contained'>
 					Create account
 				</Button>
 			</form>
 		</Container>
 	);
 };
+
+export default RegisterPage;

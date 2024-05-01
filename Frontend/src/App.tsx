@@ -2,13 +2,13 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
 import NotFound from "./routes/ErrorPages/NotFound";
-import { Layout } from "./routes/Layout";
-import { Feed } from "./routes/pages/Feed";
-import { LoginPage } from "./routes/pages/LoginPage";
-import { RegisterPage } from "./routes/pages/RegisterPage";
+import Layout from "./routes/Layout";
+import Feed from "./routes/pages/Feed";
+import LoginPage from "./routes/pages/LoginPage";
+import RegisterPage from "./routes/pages/RegisterPage";
 
 
-export const App = () => (
+const App = () => (
 	<Routes>
 		<Route element={<Layout />}>
 			<Route index element={<Feed />} />
@@ -19,3 +19,5 @@ export const App = () => (
 		</Route>
 	</Routes>
 );
+
+export default App;

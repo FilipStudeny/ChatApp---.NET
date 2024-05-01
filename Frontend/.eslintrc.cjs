@@ -31,7 +31,7 @@ module.exports = {
 		ecmaVersion: "latest",
 		sourceType: "module",
 	},
-	plugins: ["prettier", "react", "@typescript-eslint"],
+	plugins: ["prettier", "react", "@typescript-eslint", "unused-imports"],
 	settings: {
 		"import/resolver": {
 			node: {
@@ -43,7 +43,7 @@ module.exports = {
 	rules: {
 		"@typescript-eslint/no-non-null-assertion": "error",
 		"react/react-in-jsx-scope": "off",
-		"quotes": [2, "double", { avoidEscape: true }],
+		quotes: [2, "double", { avoidEscape: true }],
 		"react/function-component-definition": [2, { namedComponents: "arrow-function" }],
 		"prettier/prettier": ["warn", prettierOptions],
 		"@typescript-eslint/no-explicit-any": "off",
@@ -52,14 +52,14 @@ module.exports = {
 		"linebreak-style": "off",
 		"max-len": ["error", { code: 120 }],
 		"no-use-before-define": "off",
-		"import/prefer-default-export": "0",
-		"import/no-default-export": "error",
+		"import/prefer-default-export": 1,
+		"import/no-default-export": 0,
 		"@typescript-eslint/no-use-before-define": ["error"],
 		"arrow-parens": "off",
 		"object-curly-newline": "off",
 		"import/no-unresolved": "off",
 		"react/require-default-props": "off",
-		"indent": "off",
+		indent: "off",
 		"react/jsx-wrap-multilines": "off",
 		"implicit-arrow-linebreak": "off",
 		"@typescript-eslint/no-empty-interface": "off",
@@ -71,6 +71,16 @@ module.exports = {
 		"import/no-extraneous-dependencies": ["error", { devDependencies: true }],
 		"react/jsx-filename-extension": [1, { extensions: [".tsx", ".ts"] }],
 		"no-loop-func": "off",
+		"unused-imports/no-unused-imports": "error",
+		"unused-imports/no-unused-vars": [
+			"warn",
+			{
+				vars: "all",
+				varsIgnorePattern: "^_",
+				args: "after-used",
+				argsIgnorePattern: "^_",
+			},
+		],
 		"import/extensions": [
 			"error",
 			"ignorePackages",
@@ -84,12 +94,12 @@ module.exports = {
 		"import/order": [
 			"warn",
 			{
-				"groups": [["builtin", "external"], "internal", ["parent", "sibling", "index"], "object", "type"],
+				groups: [["builtin", "external"], "internal", ["parent", "sibling", "index"], "object", "type"],
 				"newlines-between": "always",
-				"alphabetize": {
+				alphabetize: {
 					order: "asc",
 				},
-				"pathGroups": [
+				pathGroups: [
 					{
 						pattern: "./**/*.less",
 						group: "object",
