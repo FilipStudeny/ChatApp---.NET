@@ -1,17 +1,14 @@
-import React from 'react'
-import Header from '../components/Header'
-import { Container } from '@mui/material'
-import { Outlet } from 'react-router-dom'
+import { Container } from "@mui/material";
+import React from "react";
+import { Outlet } from "react-router-dom";
 
-const Layout: React.FunctionComponent = () => {
-    return (
-        <>
-            <Header />
-            <Container maxWidth="lg" sx={{ mt: 10,  p: 0 }}>
-                <Outlet />
-            </Container>
-        </>
-    )
-}
+import Header from "../components/Header";
 
-export default Layout
+export const Layout: React.FunctionComponent = () => (
+	<>
+		<Header />
+		<Container maxWidth='lg' sx={{ mt: 10, p: 0 }}>
+			<Outlet />
+		</Container>
+	</>
+);
