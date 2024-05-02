@@ -1,5 +1,11 @@
-API/bin
-API/obj
-API/.vscode
-API/.vs
+Backend/API/bin
+Backend/API/obj
+Backend/API/.vscode
+Backend/API/.vs
+Backend/API/.idea
+Backend/Tests/.idea
+Backend/Tests/.vs
+Backend/Tests/.vscode
+Backend/Tests/bin
+Backend/Tests/obj
 .github
