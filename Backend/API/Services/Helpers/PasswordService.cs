@@ -4,23 +4,23 @@ namespace API.Services.Helpers
 {
     public interface IPasswordService
     {
-        public bool VerifyPasswordHash(string Password, IEnumerable<byte> PasswordHash, byte[] PasswordSalt);
-        public void CreatePasswordHash(string Password, out byte[] PasswordHash, out byte[] PasswordSalt);
+        public bool VerifyPasswordHash(string password, IEnumerable<byte> passwordHash, byte[] passwordSalt);
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
     }
-    public class PasswordService : IPasswordService
+    public abstract class PasswordService : IPasswordService
     {
-        void IPasswordService.CreatePasswordHash(string Password, out byte[] PasswordHash, out byte[] PasswordSalt)
+        void IPasswordService.CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512();
-            PasswordSalt = hmac.Key;
-            PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Password));
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
-        bool IPasswordService.VerifyPasswordHash(string Password, IEnumerable<byte> PasswordHash, byte[] PasswordSalt)
+        bool IPasswordService.VerifyPasswordHash(string password, IEnumerable<byte> passwordHash, byte[] passwordSalt)
         {
-            using var hmac = new HMACSHA512(PasswordSalt);
-            var hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Password));
-            return hash.SequenceEqual(PasswordHash);
+            using var hmac = new HMACSHA512(passwordSalt);
+            var hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return hash.SequenceEqual(passwordHash);
         }
     }
     

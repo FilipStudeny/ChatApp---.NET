@@ -3,6 +3,7 @@ using API.Models;
 using MongoDB.Driver;
 using API.Database;
 using Microsoft.AspNetCore.Identity;
+using Shared.Models;
 
 namespace API.Repository
 {
@@ -40,7 +41,6 @@ namespace API.Repository
         public async Task CreateUser(User user)
         {
             await _database.Users.InsertOneAsync(user);
-
         }
 
         public async Task<bool> UserExists(string value)

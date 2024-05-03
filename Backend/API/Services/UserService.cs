@@ -1,67 +1,61 @@
-﻿using API.Database;
-using API.Extensions;
-using API.Models;
+﻿using API.Extensions;
 using API.Models.DTOs;
 using API.Repository;
-using MongoDB.Driver;
+using Shared;
+using Shared.DTOs;
+using Shared.Models;
 
 namespace API.Services
 {
     public interface IUserService
     {
-        public Task<ServiceResponse<bool>> Register(Register_DTO register_DTO);
-        public Task<ServiceResponse<string>> Login(Login_DTO login_DTO);
-
+        public Task<ServiceResponse<bool>> Register(RegisterDto registerDto);
+        public Task<ServiceResponse<string>> Login(LoginDto loginDto);
         public Task<ServiceResponse<List<User>>> GetUsers();
-
-
     }
+
     public class UserService : IUserService
     {
-        private readonly IAuthenticationService authenticationService;
-        private readonly IUserRepository userRepository;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserRepository _userRepository;
 
         public UserService(IAuthenticationService authenticationService, IUserRepository userRepository)
         {
-            this.authenticationService = authenticationService;
-            this.userRepository = userRepository;
+            _authenticationService = authenticationService;
+            _userRepository = userRepository;
         }
+
         public async Task<ServiceResponse<List<User>>> GetUsers()
         {
-            List<User> users = await userRepository.GetAllUsers();
+            List<User> users = await _userRepository.GetAllUsers();
 
             return new ServiceResponse<List<User>>
             {
                 Data = users,
-                Success = (users != null)
+                Success = (true)
             };
         }
-        public async Task<ServiceResponse<string>> Login(Login_DTO login_DTO)
+        
+        public async Task<ServiceResponse<string>> Login(LoginDto loginDto)
         {
             try
             {
-                User user = await userRepository.GetUser(login_DTO.Username);
+                var user = await _userRepository.GetUser(loginDto.Username);
                 if (user == null)
                 {
                     throw new UserNotFoundException("User not found");
                 }
 
-                if (!authenticationService.VerifyPasswordHash(login_DTO.Password, user.Password.Hash, user.Password.Salt))
+                if (!_authenticationService.VerifyPasswordHash(loginDto.Password, user.Password.Hash,
+                        user.Password.Salt))
                 {
                     throw new AuthenticationFailedException("Wrong email or password, try again.");
                 }
 
-                string token = authenticationService.CreateToken(user);
+                var token = _authenticationService.CreateToken(user);
                 return new ServiceResponse<string> { Data = token };
             }
-            catch (UserNotFoundException ex)
-            {
-                return new ServiceResponse<string>
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
-            }catch(AuthenticationFailedException ex)
+            catch (CustomException ex)
             {
                 return new ServiceResponse<string>
                 {
@@ -69,50 +63,61 @@ namespace API.Services
                     Message = ex.Message
                 };
             }
-           
         }
 
-        public async Task<ServiceResponse<bool>> Register(Register_DTO register_DTO)
+        public async Task<ServiceResponse<bool>> Register(RegisterDto registerDto)
         {
-            bool userExists = await userRepository.UserExists(register_DTO.Email);
-            if(userExists)
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            var userExists = await _userRepository.UserExists(registerDto.Email);
+            if (userExists)
             {
                 return new ServiceResponse<bool>
                 {
                     Data = false,
                     Success = false,
-                    Message = "Error registering user, user already exists"
+                    Message = "Error registering user, user already exists."
                 };
             }
 
-            if (!register_DTO.Password.Equals(register_DTO.PasswordRepeat))
+            if (!registerDto.Password.Equals(registerDto.PasswordRepeat))
             {
                 return new ServiceResponse<bool>
                 {
                     Data = false,
                     Success = false,
-                    Message = "Error: Passwords do not match"
+                    Message = "Passwords do not match, try again."
                 };
             }
 
-            authenticationService.CreatePasswordHash(register_DTO.Password, out byte[] PasswordHash, out byte[] PasswordSalt);
-            User newUser = new User
+            _authenticationService.CreatePasswordHash(registerDto.Password, out byte[] passwordHash,
+                out byte[] passwordSalt);
+            var newUser = new User
             {
-                Username = register_DTO.Username,
-                Email = register_DTO.Email.ToLower(),
+                Username = registerDto.Username,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                Email = registerDto.Email.ToLower(),
+                ProfilePicture = registerDto.ProfilePicture,
+                Gender = registerDto.Gender,
                 Password = new PasswordInfo
                 {
-                    Hash = PasswordHash,
-                    Salt = PasswordSalt
+                    Hash = passwordHash,
+                    Salt = passwordSalt
                 },
                 RegisterDate = DateTime.UtcNow,
                 LastActivity = DateTime.UtcNow
             };
 
-            await userRepository.CreateUser(newUser);
-            return new ServiceResponse<bool> { Data = true, Message = "New user registered" };
-           
+            await _userRepository.CreateUser(newUser);
+            return new ServiceResponse<bool> { Data = true, Message = "New account created" };
         }
-
     }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using API.Database;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,8 +16,8 @@ builder.Services.AddSingleton<MongoDbContext>(serviceProvider =>
 {
     var settings = serviceProvider.GetRequiredService<IOptions<MongoSettings>>().Value;
     return new MongoDbContext(settings.ConnectionString, settings.Database);
-   
 });
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
 
 builder.Services.AddControllers();
@@ -56,6 +57,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 //** REPOSITORY **//
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
 
 //*** AUTHENTICATION ***//
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -88,5 +90,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var mongo = services.GetRequiredService<MongoDbContext>();
+mongo.ClearDatabase();
+mongo.SeedData();
 
 app.Run();

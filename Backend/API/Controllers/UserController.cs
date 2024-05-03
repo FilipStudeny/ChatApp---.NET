@@ -3,6 +3,9 @@ using API.Models.DTOs;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Shared;
+using Shared.DTOs;
+using Shared.Models;
 
 namespace API.Controllers
 {
@@ -10,40 +13,30 @@ namespace API.Controllers
     [ApiController]
     public class UserController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService userService = userService;
+        private readonly IUserService _userService = userService;
 
         [HttpGet]
         [Route("/")]
         [Authorize]
         public async Task<ActionResult<ServiceResponse<List<User>>>> GetUsers()
         {
-            return await userService.GetUsers();
+            return await _userService.GetUsers();
         }
 
         [HttpPost]
         [Route("/login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(Login_DTO login_DTO)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(LoginDto loginDto)
         {
-            ServiceResponse<string> response = await userService.Login(login_DTO);
-            if (!response.Success)
-            {
-                return StatusCode(401, response);
-            }
-
-            return Ok(response);
+            var response = await _userService.Login(loginDto);
+            return !response.Success ? StatusCode(401, response) : Ok(response);
         }
 
         [HttpPost]
         [Route("/register")]
-        public async Task<ActionResult<ServiceResponse<bool>>> Register(Register_DTO register_DTO)
+        public async Task<ActionResult<ServiceResponse<bool>>> Register(RegisterDto registerDto)
         {
-            ServiceResponse<bool> response = await userService.Register(register_DTO);
-            if (!response.Success)
-            {
-                return StatusCode(401, response);
-            }
-
-            return Ok(response);
+            var response = await _userService.Register(registerDto);
+            return !response.Success ? StatusCode(401, response) : Ok(response);
         }
     }
 }

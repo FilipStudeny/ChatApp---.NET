@@ -1,4 +1,4 @@
-﻿namespace API.Models;
+﻿namespace Shared.Enums;
 
 public enum Gender
 {

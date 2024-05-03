@@ -1,6 +1,6 @@
 ﻿namespace API.Models.DTOs
 {
-    public class User_DTO
+    public class UserDto
     {
         public string Username = string.Empty;
         public string Password = string.Empty;
