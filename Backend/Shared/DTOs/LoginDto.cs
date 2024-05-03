@@ -1,4 +1,4 @@
-﻿namespace API.Models.DTOs
+﻿namespace Shared.DTOs
 {
     public class LoginDto
     {

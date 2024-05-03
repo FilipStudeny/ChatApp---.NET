@@ -1,8 +1,7 @@
-﻿using API.Models;
-using API.Models.DTOs;
-using API.Services;
+﻿using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using MongoDB.Bson;
 using Shared;
 using Shared.DTOs;
 using Shared.Models;
@@ -21,6 +20,14 @@ namespace API.Controllers
         public async Task<ActionResult<ServiceResponse<List<User>>>> GetUsers()
         {
             return await _userService.GetUsers();
+        }
+        
+        [HttpGet]
+        [Route("/user/:id")]
+        [Authorize]
+        public async Task<ActionResult<ServiceResponse<User>>> GetUser(ObjectId id)
+        {
+            return await _userService.GetUser(id);
         }
 
         [HttpPost]
