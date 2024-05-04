@@ -20,7 +20,7 @@ public class User
     [BsonElement("gender")] 
     [BsonRepresentation(BsonType.String)]
     public Gender Gender { get; set; }
-    [BsonElement("password")] public required PasswordInfo Password { get; set; }
+    [BsonElement("password")] public PasswordInfo Password { get; set; }
     [BsonElement("friends")] public List<Friend> Friends { get; set; } = [];
     [BsonElement("register_date")] public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
     [BsonElement("last_activity")] public DateTime LastActivity { get; set; } = DateTime.UtcNow;

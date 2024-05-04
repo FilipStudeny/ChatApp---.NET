@@ -16,7 +16,6 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("/")]
-        [Authorize]
         public async Task<ActionResult<ServiceResponse<List<User>>>> GetUsers()
         {
             return await _userService.GetUsers();

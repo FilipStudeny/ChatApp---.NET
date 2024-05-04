@@ -8,4 +8,12 @@ Backend/Tests/.vs
 Backend/Tests/.vscode
 Backend/Tests/bin
 Backend/Tests/obj
+Backend/Shared/.idea
+Backend/Shared/.vs
+Backend/Shared/.vscode
+Backend/Shared/bin
+Backend/Shared/obj
+.idea
+.vs
+.vscode
 .github
