@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System.Security.Cryptography;
+using MongoDB.Bson;
 using Shared.Enums;
 using Shared.Models;
  
@@ -52,11 +53,13 @@ public class UserBuilder
         return this;
     }
 
-    public UserBuilder WithPassword(byte[] hash, byte[] salt)
+    public UserBuilder WithPassword(string? password = null)
     {
-        _user.Password = new PasswordInfo { Hash = hash, Salt = salt };
+        var pass = password ?? GenerateRandomPassword();
+        _user.Password = GenerateRandomHash(pass);
         return this;
     }
+
 
     public UserBuilder WithFriends(List<Friend> friends)
     {
@@ -115,6 +118,19 @@ public class UserBuilder
         return Faker.RandomNumber.Next(0, 10000).ToString(); // For demonstration purposes, generate a random string
     }
     
+    private PasswordInfo GenerateRandomHash(string password)
+    {
+        using var hmac = new HMACSHA512();
+        var passwordSalt = hmac.Key;
+        var passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
+        return new PasswordInfo
+        {
+            Hash = passwordHash,
+            Salt = passwordSalt
+        };
+    }
+    
     private Gender PickRandomGender()
     {
         var randomIndex = new Random().Next(2);
@@ -150,6 +166,10 @@ public class UserBuilder
             _user.LastActivity = DateTime.UtcNow;
         if (_user.NotificationsStructId == ObjectId.Empty)
             _user.NotificationsStructId = ObjectId.GenerateNewId();
+        if (_user.Password == null)
+        {
+            _user.Password = GenerateRandomHash(GenerateRandomPassword());
+        }
 
         return _user;
     }

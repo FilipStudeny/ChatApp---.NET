@@ -1,5 +1,4 @@
-﻿using API.Services;
-using API.Services.Helpers;
+﻿using API.Services.Helpers;
 using MongoDB.Bson;
 using Shared.Enums;
 using Shared.Models;
@@ -65,12 +64,8 @@ public class SeedData : PasswordService
 
     private PasswordInfo SeedPassword(string password)
     {
-        ((IPasswordService)this).CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-        return new PasswordInfo
-        {
-            Salt = passwordSalt,
-            Hash = passwordHash
-        };
+        var passwordInfo = ((IPasswordService)this).CreatePasswordHash(password);
+        return passwordInfo;
     }
 
 }

@@ -73,7 +73,7 @@ namespace API.Services
                 var user = await _userRepository.GetUserByEmailOrUsername(loginDto.Username, loginDto.Username);
                 if (user == null)
                 {
-                    throw new UserNotFoundException("User not found");
+                    throw new UserNotFoundException("Account not found.");
                 }
 
                 if (!_authenticationService.VerifyPasswordHash(loginDto.Password, user.Password.Hash,
@@ -116,7 +116,7 @@ namespace API.Services
                     throw new DatabaseException("Password must be longer than 6 symbols.");
                 }
 
-                _authenticationService.CreatePasswordHash(registerDto.Password, out var passwordHash, out var passwordSalt);
+                var password = _authenticationService.CreatePasswordHash(registerDto.Password);
                 var newUser = new User
                 {
                     Username = registerDto.Username,
@@ -125,11 +125,7 @@ namespace API.Services
                     Email = registerDto.Email.ToLower(),
                     ProfilePicture = registerDto.ProfilePicture,
                     Gender = registerDto.Gender,
-                    Password = new PasswordInfo
-                    {
-                        Hash = passwordHash,
-                        Salt = passwordSalt
-                    },
+                    Password = password,
                     RegisterDate = DateTime.UtcNow,
                     LastActivity = DateTime.UtcNow
                 };

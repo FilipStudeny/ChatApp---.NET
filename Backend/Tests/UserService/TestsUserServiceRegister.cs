@@ -1,7 +1,10 @@
 ﻿
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using API.Repository;
 using API.Services;
+using API.Services.Helpers;
 using NSubstitute;
 using Shared.Builders;
 using Shared.DTOs;
@@ -11,6 +14,8 @@ namespace Tests.UserService;
 
 public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture)
 {
+    private readonly MongoDbFixture _fixture = fixture;
+
     [Fact]
     public async Task UserService_Register_WhenUserAlreadyExists_ShouldThrowUserException()
     {
@@ -32,7 +37,7 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         var authenticationService = Substitute.For<IAuthenticationService>();
         var userService = new API.Services.UserService(authenticationService, userRepository);
 
-        var database = fixture.GetDatabase("ChatApp");
+        var database = _fixture.GetDatabase("ChatApp");
         var collection = database.GetCollection<User>("Users");
         collection.InsertOne(user);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(true);
@@ -131,9 +136,23 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
+
         var userService = new API.Services.UserService(authenticationService, userRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
-        
+        authenticationService.CreatePasswordHash(registerDto.Password)
+            .Returns(callInfo =>
+            {
+                var password = callInfo.Arg<string>();
+                using var hmac = new HMACSHA512();
+                var passwordSalt = hmac.Key;
+                var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                return new PasswordInfo
+                {
+                    Hash = passwordHash,
+                    Salt = passwordSalt
+                };
+            });    
         // ACT
         var response = await userService.Register(registerDto);
         
