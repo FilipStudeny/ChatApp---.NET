@@ -103,17 +103,17 @@ namespace API.Services
                 var userExists = await _userRepository.UserExists(registerDto.Email, registerDto.Username);
                 if (userExists)
                 {
-                    throw new UserException("Couldn't create an account, username or email already in use.");
+                    throw new DatabaseException("Couldn't create an account, username or email already in use.");
                 }
 
                 if (!registerDto.Password.Equals(registerDto.PasswordRepeat))
                 {
-                    throw new UserException("Passwords do not match, try again.");
+                    throw new DatabaseException("Passwords do not match, try again.");
                 }
 
                 if (registerDto.Password.Length < 6)
                 {
-                    throw new UserException("Password must be longer than 6 symbols.");
+                    throw new DatabaseException("Password must be longer than 6 symbols.");
                 }
 
                 _authenticationService.CreatePasswordHash(registerDto.Password, out var passwordHash, out var passwordSalt);
@@ -135,7 +135,7 @@ namespace API.Services
                 };
 
                 await _userRepository.CreateUser(newUser);
-                return new ServiceResponse<bool> { Data = true, Message = "Account created" };
+                return new ServiceResponse<bool> { Data = true, Message = "Account created." };
             }
             catch (CustomException ex)
             {

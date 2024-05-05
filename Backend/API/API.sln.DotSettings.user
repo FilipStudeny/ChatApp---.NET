@@ -2,5 +2,10 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=80ef9703_002D6a14_002D4cfe_002D865b_002Db42f145c8a5b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UnitTest1.GetUsers_ShouldReturnListOfUsers&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.Tests_UserService_Register.UserService_Register_WhenUserAlreadyExists_ShouldThrowUserException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestsUserServiceRegister.UserService_Register_WhenUserAlreadyExists_ShouldThrowUserException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestsUserServiceRegister.UserService_Register_WhenPasswordDoNotMatch_ShouldThrowUserException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestsUserServiceRegister.UserService_Register_WhenPasswordIsShortThanSixSymbols_ShouldThrowUserException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestsUserServiceRegister.UserService_Register_WhenRegisterDataIsProvided_ShouldCreateNewAccount&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
