@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using API.Services.Helpers;
+using MongoDB.Bson;
 using Shared.Models;
 
 namespace API.Services
@@ -12,9 +13,12 @@ namespace API.Services
     public interface IAuthenticationService : IPasswordService
     {
         public string CreateToken(User user);
+
+        public ObjectId GetUserIdFromToken();
+        public string GetUserEmailFromToken();
     }
 
-    public class AuthenticationService(IOptions<AppSettings> configuration) : PasswordService, IAuthenticationService
+    public class AuthenticationService(IOptions<AppSettings> configuration, IHttpContextAccessor httpContextAccessor) : PasswordService, IAuthenticationService
     {
         private readonly AppSettings _configuration = configuration.Value;
 
@@ -25,7 +29,7 @@ namespace API.Services
 
             var claims = new Dictionary<string, object>
             {
-                [ClaimTypes.NameIdentifier] = user.Id,
+                [ClaimTypes.NameIdentifier] = user.Id.ToString(),
                 [ClaimTypes.Name] = user.Username,
                 [ClaimTypes.Email] = user.Email
             };
@@ -45,5 +49,16 @@ namespace API.Services
             return token;
         }
 
+        public ObjectId GetUserIdFromToken()
+        {
+            var id = httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return ObjectId.Parse(id!);
+        }
+
+        public string GetUserEmailFromToken()
+        {
+            var email = httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+            return email!;
+        }
     }
 }

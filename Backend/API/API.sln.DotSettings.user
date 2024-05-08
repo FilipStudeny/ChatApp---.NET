@@ -4,5 +4,12 @@
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestsUserServiceRegister&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceLogin.UserService_Login_WhenAccountIsNotFound_ShouldThrownAnException&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceLogin.UserService_Login_WhenWrongPasswordWasProvided_ShouldThrownAnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceLogin.UserService_Login_WhenCorrectInformationIsProvided_ShouldReturnToken&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceLogin&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUsers_RetrieveAllUsers_ShouldReturnListOfUsers&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUser_WhenUserDoesntExist_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUser_WhenUserExist_ShouldReturnUser&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.AuthenticationService.TestAuthenticationsService.AuthenticationService_CreateToken_WhenUserDataProvided_ShouldReturnToken&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.AuthenticationService.TestAuthenticationsService.AuthenticationService_CreateToken_WhenTokenIsProvided_DecodeToken_ShouldReturnToken&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -10,18 +10,21 @@ public class Notification
 {
     [BsonId]
     [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public ObjectId Id { get; set; }
     
-    [BsonId]
     [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
     [BsonElement("user")] 
-    public string User { get; set; } = string.Empty;
+    public ObjectId Receiver { get; set; }
     
-    [BsonElement("description")] 
-    public string Description { get; set; } = string.Empty;
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    [BsonElement("user")] 
+    public ObjectId Sender { get; set; }
+    
+    [BsonElement("message")] 
+    public string Message { get; set; } = string.Empty;
     
     [JsonConverter(typeof(StringEnumConverter))] 
-    [BsonElement("gender")] 
+    [BsonElement("notification_type")] 
     [BsonRepresentation(BsonType.String)]
     public NotificationType NotificationType { get; set; }
     

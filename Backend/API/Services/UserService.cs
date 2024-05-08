@@ -14,6 +14,7 @@ namespace API.Services
         public Task<ServiceResponse<string>> Login(LoginDto loginDto);
         public Task<ServiceResponse<List<User>>> GetUsers();
         public Task<ServiceResponse<User>> GetUser(ObjectId id);
+      //  public Task<ServiceResponse<bool>> AddFriend(ObjectId user, ObjectId friend);
     }
 
     public class UserService : IUserService
