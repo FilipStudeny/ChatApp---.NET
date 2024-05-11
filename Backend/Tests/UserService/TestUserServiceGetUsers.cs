@@ -25,8 +25,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
 
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
+        var notificationRepository = Substitute.For<INotificationsRepository>();
         userRepository.GetAllUsers().Returns(new List<User>{user, user2, user3, user4});
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
 
         // ACT
         var response = await userService.GetUsers();
@@ -54,8 +55,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
+        var notificationRepository = Substitute.For<INotificationsRepository>();
         userRepository.GetUser(user.Id)!.Returns<Task<User?>>(Task.FromResult<User?>(null));
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         
         // ACT
         var response = await userService.GetUser(user.Id);
@@ -79,8 +81,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
+        var notificationRepository = Substitute.For<INotificationsRepository>();
         userRepository.GetUser(user.Id)!.Returns<Task<User?>>(Task.FromResult<User?>(user));
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         
         // ACT
         var response = await userService.GetUser(user.Id);

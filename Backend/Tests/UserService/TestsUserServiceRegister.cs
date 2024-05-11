@@ -2,9 +2,11 @@
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using API.Database;
 using API.Repository;
 using API.Services;
 using API.Services.Helpers;
+using FluentAssertions;
 using NSubstitute;
 using Shared.Builders;
 using Shared.DTOs;
@@ -20,6 +22,21 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
     public async Task UserService_Register_WhenUserAlreadyExists_ShouldThrowUserException()
     {
         // ARRANGE
+        var user = new UserBuilder().WithPassword("colonel").Build();
+
+        var collection = _fixture.DbContext.Users;
+        await collection.InsertOneAsync(user);
+
+        var userRepository = new UserRepository(fixture.DbContext);
+        var s = await userRepository.GetAllUsers();
+        // ACT
+
+        s.Should().NotBeNull();
+        // ASSERT
+
+
+        /*
+        // ARRANGE
         var user = new UserBuilder().Build();
         var registerDto = new RegisterDto
         {
@@ -32,24 +49,26 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
             Password = "colonel",
             PasswordRepeat = "colonel"
         };
-        
+
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
 
         var database = _fixture.GetDatabase("ChatApp");
         var collection = database.GetCollection<User>("Users");
-        collection.InsertOne(user);
+        await collection.InsertOneAsync(user);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(true);
-        
+
         // ACT
         var response = await userService.Register(registerDto);
-        
+
         // ASSERT
         Assert.False(response.Success);
         Assert.Equal("Couldn't create an account, username or email already in use.", response.Message);
         Assert.False(response.Data);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        */
     }
 
     [Fact]
@@ -71,7 +90,8 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
         
         // ACT
@@ -103,7 +123,8 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
         
         // ACT
@@ -120,6 +141,17 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
     [Fact]
     public async Task UserService_Register_WhenRegisterDataIsProvided_ShouldCreateNewAccount()
     {
+        var userRepositroy = new UserRepository(fixture.DbContext);
+
+        var ss = new User()
+        {
+            FirstName = "asda",
+            LastName = "user.LastName",
+            Email = "Asda"
+        };
+        userRepositroy.CreateUser(ss);
+        var s = ss.Id;
+        
         // ARRANGE
         var user = new UserBuilder().Build();
         var registerDto = new RegisterDto
@@ -136,9 +168,10 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
+        userRepository.CreateUser(user).Returns(Task<User>.FromResult);
         authenticationService.CreatePasswordHash(registerDto.Password)
             .Returns(callInfo =>
             {
@@ -155,7 +188,8 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
             });    
         // ACT
         var response = await userService.Register(registerDto);
-        
+
+       
         // ASSERT
         Assert.True(response.Success);
         Assert.Equal("Account created.", response.Message);

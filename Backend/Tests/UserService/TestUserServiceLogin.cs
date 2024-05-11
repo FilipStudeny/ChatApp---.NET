@@ -26,7 +26,8 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
 
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(false);
         
         // ACT
@@ -63,7 +64,8 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(false);
         
         await userService.Register(registerDto);
@@ -105,7 +107,8 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
         
         var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var userService = new API.Services.UserService(authenticationService, userRepository);
+        var notificationRepository = Substitute.For<INotificationsRepository>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
         userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(false);
         
         await userService.Register(registerDto);

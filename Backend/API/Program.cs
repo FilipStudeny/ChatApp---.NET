@@ -56,7 +56,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 //** REPOSITORY **//
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
+builder.Services.AddScoped<INotificationsRepository, NotificationsRepository >();
 
 //*** AUTHENTICATION ***//
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

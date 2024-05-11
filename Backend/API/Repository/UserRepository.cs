@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using API.Database;
+using API.Extensions;
 using MongoDB.Bson;
 using Shared.Models;
 
@@ -15,41 +16,41 @@ namespace API.Repository
         public Task<bool> UserExists(ObjectId id);
         public Task<bool> UserExists(string email, string username);
 
+        public Task<bool> UpdateUserData(string whatToUpdate, string data);
     }
 
     public class UserRepository(MongoDbContext database) : IUserRepository
     {
-        private readonly MongoDbContext _database = database;
-
         public async Task<User> GetUser(ObjectId id)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, id);
-            var user = await _database.Users.Find(filter).FirstOrDefaultAsync();
+            var user = await database.Users.Find(filter).FirstOrDefaultAsync();
             return user;
         }
 
         public async Task<User> GetUserByEmailOrUsername(string email, string username)
         {
             var filter = Builders<User>.Filter.Or(
-               Builders<User>.Filter.Eq(u => u.Username, email),
-               Builders<User>.Filter.Eq(u => u.Email, username)
-           );
+                Builders<User>.Filter.Eq(u => u.Username, email),
+                Builders<User>.Filter.Eq(u => u.Email, username)
+            );
 
-            var user = await _database.Users
+            var user = await database.Users
                 .Find(filter)
                 .FirstOrDefaultAsync();
 
             return user;
         }
+
         public async Task<List<User>> GetAllUsers()
         {
-            var users = await _database.Users.Find(u => true).ToListAsync();
+            var users = await database.Users.Find(u => true).ToListAsync();
             return users;
         }
 
         public async Task CreateUser(User user)
         {
-            await _database.Users.InsertOneAsync(user);
+            await database.Users.InsertOneAsync(user);
         }
 
         public async Task<bool> UserExists(ObjectId id)
@@ -62,7 +63,11 @@ namespace API.Repository
         {
             var user = await GetUserByEmailOrUsername(email, username);
             return user != null;
-            
+        }
+
+        public Task<bool> UpdateUserData(string whatToUpdate, string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

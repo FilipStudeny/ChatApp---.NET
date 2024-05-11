@@ -13,11 +13,11 @@ public class Notification
     public ObjectId Id { get; set; }
     
     [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-    [BsonElement("user")] 
+    [BsonElement("receiver")] 
     public ObjectId Receiver { get; set; }
     
     [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-    [BsonElement("user")] 
+    [BsonElement("sender")] 
     public ObjectId Sender { get; set; }
     
     [BsonElement("message")] 

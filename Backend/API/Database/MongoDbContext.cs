@@ -15,6 +15,7 @@ namespace API.Database
         }
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
+        public IMongoCollection<NotificationsStruct> NotificationsStructs => _database.GetCollection<NotificationsStruct>("Notifications");
 
         public void ClearDatabase()
         {
