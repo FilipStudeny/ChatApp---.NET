@@ -15,8 +15,7 @@ namespace API.Repository
         public Task CreateUser(User user);
         public Task<bool> UserExists(ObjectId id);
         public Task<bool> UserExists(string email, string username);
-
-        public Task<bool> UpdateUserData(string whatToUpdate, string data);
+        public Task<bool> UpdateUserData(ObjectId userId, string fieldName, object newValue);
     }
 
     public class UserRepository(MongoDbContext database) : IUserRepository
@@ -31,8 +30,8 @@ namespace API.Repository
         public async Task<User> GetUserByEmailOrUsername(string email, string username)
         {
             var filter = Builders<User>.Filter.Or(
-                Builders<User>.Filter.Eq(u => u.Username, email),
-                Builders<User>.Filter.Eq(u => u.Email, username)
+                Builders<User>.Filter.Eq(u => u.Username, username),
+                Builders<User>.Filter.Eq(u => u.Email, email)
             );
 
             var user = await database.Users
@@ -65,9 +64,14 @@ namespace API.Repository
             return user != null;
         }
 
-        public Task<bool> UpdateUserData(string whatToUpdate, string data)
+        public async Task<bool> UpdateUserData(ObjectId userId, string fieldName, object newValue)
         {
-            throw new NotImplementedException();
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(fieldName, newValue);
+
+            var result = await database.Users.UpdateOneAsync(filter, update);
+
+            return result.ModifiedCount > 0;
         }
     }
 }

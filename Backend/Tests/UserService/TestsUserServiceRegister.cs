@@ -16,162 +16,123 @@ namespace Tests.UserService;
 
 public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture)
 {
-    private readonly MongoDbFixture _fixture = fixture;
 
     [Fact]
     public async Task UserService_Register_WhenUserAlreadyExists_ShouldThrowUserException()
     {
         // ARRANGE
-        var user = new UserBuilder().WithPassword("colonel").Build();
-
-        var collection = _fixture.DbContext.Users;
-        await collection.InsertOneAsync(user);
-
-        var userRepository = new UserRepository(fixture.DbContext);
-        var s = await userRepository.GetAllUsers();
-        // ACT
-
-        s.Should().NotBeNull();
-        // ASSERT
-
-
-        /*
-        // ARRANGE
         var user = new UserBuilder().Build();
-        var registerDto = new RegisterDto
+        var registerDto = new RegisterDto()
         {
-            Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            ProfilePicture = user.ProfilePicture,
             Gender = user.Gender,
-            Password = "colonel",
-            PasswordRepeat = "colonel"
+            Password = "password",
+            PasswordRepeat = "password",
+            Username = user.Username,
+            ProfilePicture = "picture"
         };
-
-        var userRepository = Substitute.For<IUserRepository>();
-        var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationRepository = Substitute.For<INotificationsRepository>();
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
-
-        var database = _fixture.GetDatabase("ChatApp");
-        var collection = database.GetCollection<User>("Users");
+        
+        var collection = fixture.DbContext.Users;
         await collection.InsertOneAsync(user);
-        userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(true);
-
+        var authenticationService = Substitute.For<IAuthenticationService>();
+        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        
         // ACT
         var response = await userService.Register(registerDto);
 
         // ASSERT
-        Assert.False(response.Success);
-        Assert.Equal("Couldn't create an account, username or email already in use.", response.Message);
-        Assert.False(response.Data);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        */
+        response.Data.Should().BeFalse();
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
-
+    
     [Fact]
-    public async Task UserService_Register_WhenPasswordDoNotMatch_ShouldThrowUserException()
+    public async Task UserService_Register_WhenPasswordsDoNotMatch_ShouldThrowValidationException()
     {
         // ARRANGE
         var user = new UserBuilder().Build();
-        var registerDto = new RegisterDto
+        var registerDto = new RegisterDto()
         {
-            Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            ProfilePicture = user.ProfilePicture,
             Gender = user.Gender,
-            Password = "colonel",
-            PasswordRepeat = "admin"
+            Password = "password",
+            PasswordRepeat = "drowssap",
+            Username = user.Username,
+            ProfilePicture = "picture"
         };
-        
-        var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationRepository = Substitute.For<INotificationsRepository>();
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
-        userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
+        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
         
         // ACT
         var response = await userService.Register(registerDto);
-        
+
         // ASSERT
-        Assert.False(response.Success);
-        Assert.Equal("Passwords do not match, try again.", response.Message);
-        Assert.False(response.Data);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.Data.Should().BeFalse();
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
+    
 
     [Fact]
     public async Task UserService_Register_WhenPasswordIsShortThanSixSymbols_ShouldThrowUserException()
     {
         // ARRANGE
         var user = new UserBuilder().Build();
-        var registerDto = new RegisterDto
+        var registerDto = new RegisterDto()
         {
-            Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            ProfilePicture = user.ProfilePicture,
             Gender = user.Gender,
-            Password = "root",
-            PasswordRepeat = "root"
+            Password = "pass",
+            PasswordRepeat = "pass",
+            Username = user.Username,
+            ProfilePicture = "picture"
         };
-        
-        var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationRepository = Substitute.For<INotificationsRepository>();
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
-        userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
-        
+        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+
         // ACT
         var response = await userService.Register(registerDto);
         
         // ASSERT
-        Assert.False(response.Success);
-        Assert.Equal("Password must be longer than 6 symbols.", response.Message);
-        Assert.False(response.Data);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.Data.Should().BeFalse();
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
     
     
     [Fact]
-    public async Task UserService_Register_WhenRegisterDataIsProvided_ShouldCreateNewAccount()
+    public async Task UserService_Register_CreateNewAccount_ShouldCreateNewAccount()
     {
-        var userRepositroy = new UserRepository(fixture.DbContext);
-
-        var ss = new User()
-        {
-            FirstName = "asda",
-            LastName = "user.LastName",
-            Email = "Asda"
-        };
-        userRepositroy.CreateUser(ss);
-        var s = ss.Id;
-        
         // ARRANGE
-        var user = new UserBuilder().Build();
-        var registerDto = new RegisterDto
+        var user = new UserBuilder().WithPassword("colonel").Build();
+        var registerDto = new RegisterDto()
         {
-            Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            ProfilePicture = user.ProfilePicture,
             Gender = user.Gender,
             Password = "colonel",
-            PasswordRepeat = "colonel"
+            PasswordRepeat = "colonel",
+            Username = user.Username,
+            ProfilePicture = "picture"
         };
         
-        var userRepository = Substitute.For<IUserRepository>();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationRepository = Substitute.For<INotificationsRepository>();
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationRepository);
-        userRepository.UserExists(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
-        userRepository.CreateUser(user).Returns(Task<User>.FromResult);
+        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
         authenticationService.CreatePasswordHash(registerDto.Password)
             .Returns(callInfo =>
             {
@@ -185,16 +146,18 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
                     Hash = passwordHash,
                     Salt = passwordSalt
                 };
-            });    
+            }); 
+        
         // ACT
         var response = await userService.Register(registerDto);
-
-       
+        var userRepositoryResponse = await userRepository.GetUserByEmailOrUsername(user.Email, user.Username);
+        
         // ASSERT
-        Assert.True(response.Success);
-        Assert.Equal("Account created.", response.Message);
-        Assert.True(response.Data);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.Data.Should().BeTrue();
+        response.Success.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        userRepositoryResponse.Email.Should().Be(user.Email);
+        userRepositoryResponse.Username.Should().Be(user.Username);
     }
 
 }

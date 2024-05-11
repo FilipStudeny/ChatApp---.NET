@@ -18,5 +18,17 @@
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestUserRepository.UserRepository_GetUser_ShouldReturnUser&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestUserRepository.UserRepository_GetUser_WhenUserIsNotFound_ShouldReturnNull&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestUserRepository&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUser_WhenUserDoesntExists_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUser_WhenUserExists_ShouldReturnUser&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers.UserService_GetUsers_WhenUsersDontExist_ShouldReturnEmptyList&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceGetUsers&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.AuthenticationService.TestAuthenticationsService&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotificationsStructById_WhenStructIsNotFound_ShouldReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotificationsStructByUserId_WhenStructIsNotFound_ShouldReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotification_WhenNotificationIsNotFound_ShoulReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotificationsStructById_WhenStructIsFound_ShouldReturnStruct&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotificationsStructByUserId_WhenStructIsFound_ShouldReturnStruct&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotification_WhenNotificationIsNotFound_ShouldReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotification_WhenNotificationIsFound_ShouldReturnNotification&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

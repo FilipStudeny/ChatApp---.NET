@@ -9,7 +9,7 @@ namespace API.Extensions
     }
 
     public class UserNotFoundException(string message) : CustomException(message, HttpStatusCode.NotFound);
-    public class AuthenticationFailedException(string message) : CustomException(message, HttpStatusCode.Unauthorized);
+    public class AuthenticationFailedException(string message) : CustomException(message, HttpStatusCode.BadRequest);
     public class UserException(string message) : CustomException(message, HttpStatusCode.BadRequest);
     public class ServiceException(string message) : CustomException(message, HttpStatusCode.InternalServerError);
     public class InvalidRequest(string message) : CustomException(message, HttpStatusCode.BadRequest);

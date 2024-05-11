@@ -8,79 +8,56 @@ namespace API.Repository;
 
 public interface INotificationsRepository
 {
-    public Task<NotificationsStruct> GetNotificationStructById(ObjectId notificationStructId);
-    public Task<NotificationsStruct> GetNotificationStructByUser(ObjectId userId);
-    public Task<List<Notification>> GetAllUserNotifications(ObjectId notificationStruct);
-    public Task<Notification> GetNotification(ObjectId notificationStruct, ObjectId notificationId);
-    public Task<bool> CreateNotification(ObjectId userId, Notification notification);
-    public Task<bool> DeleteNotification(ObjectId notificationId, ObjectId userId);
-
-    public Task<NotificationsStruct> CreateNotificationsStruct(ObjectId userId);
+    public Task<NotificationsStruct?> GetNotificationsStructById(ObjectId id);
+    public Task<NotificationsStruct?> GetNotificationsStructByUser(ObjectId userId);
+    public Task<Notification?> GetNotification(ObjectId userOrNotificationsStructId,ObjectId notificationId);
+    public Task<List<Notification>> GetNotifications(ObjectId userOrNotificationsStructId);
+    public Task CreateNotification(Notification notification);
+    public Task DeleteNotification(ObjectId notificationId);
+    public Task<bool> NotificationExists(ObjectId notificationId);
 }
 
-public class NotificationsRepository(MongoDbContext database, IUserRepository userRepository) : INotificationsRepository
+public class NotificationsRepository(MongoDbContext database) : INotificationsRepository
 {
-    public async Task<NotificationsStruct> GetNotificationStructById(ObjectId notificationStructId)
+    public async Task<NotificationsStruct?> GetNotificationsStructById(ObjectId id)
     {
-        var notificationStruct =
-            await database.NotificationsStructs.Find(n => n.Id == notificationStructId).FirstOrDefaultAsync();
-        return notificationStruct;
+        var filter = Builders<NotificationsStruct>.Filter.Eq(u => u.Id, id);
+        return await database.NotificationsStructs.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<NotificationsStruct> GetNotificationStructByUser(ObjectId userId)
+    public async Task<NotificationsStruct?> GetNotificationsStructByUser(ObjectId userId)
     {
-        var notificationStruct = await database.NotificationsStructs.Find(n => n.User == userId).FirstOrDefaultAsync()
-                                 ?? await CreateNotificationsStruct(userId);
-        return notificationStruct;
+        var filter = Builders<NotificationsStruct>.Filter.Eq(u => u.User, userId);
+        return await database.NotificationsStructs.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Notification>> GetAllUserNotifications(ObjectId userId)
+    public async Task<Notification?> GetNotification(ObjectId userOrNotificationsStructId,ObjectId notificationId)
     {
-        var notifications = await GetNotificationStructByUser(userId);
-        return notifications.NotificationsList;
-    }
+        var notificationsStruct = await GetNotificationsStructById(userOrNotificationsStructId) 
+                                  ?? await GetNotificationsStructByUser(userOrNotificationsStructId);
 
-
-    public async Task<Notification> GetNotification(ObjectId notificationStruct, ObjectId notificationId)
-    {
-        var notification = await database.NotificationsStructs
-            .Find(n => n.Id == notificationStruct)
-            .Project(n => n.NotificationsList.FirstOrDefault(x => x.Id == notificationId))
-            .FirstOrDefaultAsync();
+        var notification = notificationsStruct?.NotificationsList.Find(n => n.Id == notificationId);
         return notification;
     }
 
-    public async Task<bool> CreateNotification(ObjectId userId, Notification notification)
+    public async Task<List<Notification>> GetNotifications(ObjectId userOrNotificationsStructId)
     {
-        var notificationsStruct = await GetNotificationStructByUser(userId);
-
-        notificationsStruct.NotificationsList.Add(notification);
-
-        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", notificationsStruct.Id);
-        var update = Builders<NotificationsStruct>.Update
-            .Set("NotificationsList", notificationsStruct.NotificationsList);
-
-        var result = await database.NotificationsStructs.UpdateOneAsync(filter, update);
-
-        // Check if the update was successful
-        return result.ModifiedCount > 0;
+        var notificationsStruct = await GetNotificationsStructById(userOrNotificationsStructId) 
+                                  ?? await GetNotificationsStructByUser(userOrNotificationsStructId);
+        return notificationsStruct?.NotificationsList ?? [];
     }
 
-
-    public async Task<NotificationsStruct> CreateNotificationsStruct(ObjectId userId)
+    public Task CreateNotification(Notification notification)
     {
-        var newStruct = new NotificationsStruct()
-        {
-            User = userId,
-            NotificationsCount = 0,
-            NotificationsList = []
-        };
-
-        await database.NotificationsStructs.InsertOneAsync(newStruct);
-        return newStruct;
+        throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteNotification(ObjectId notificationId, ObjectId userId)
+    public Task DeleteNotification(ObjectId notificationId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> NotificationExists(ObjectId notificationId)
     {
         throw new NotImplementedException();
     }

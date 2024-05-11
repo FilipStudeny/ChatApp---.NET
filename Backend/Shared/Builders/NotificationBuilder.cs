@@ -43,6 +43,12 @@ public class NotificationBuilder
         _notification.CreatedAt = createdAt;
         return this;
     }
+    
+    public NotificationBuilder WithNotificationsStruct(ObjectId notificationsStructId)
+    {
+        _notification.NotificationsStruct = notificationsStructId;
+        return this;
+    }
 
     public Notification Build()
     {

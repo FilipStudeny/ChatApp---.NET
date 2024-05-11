@@ -7,7 +7,6 @@ namespace Tests.Repositories;
 
 public class TestUserRepository(MongoDbFixture fixture) : TestBase(fixture)
 {
-    
     [Fact]
     public async Task UserRepository_GetUser_WhenUserIsNotFound_ShouldReturnNull()
     {
@@ -101,5 +100,116 @@ public class TestUserRepository(MongoDbFixture fixture) : TestBase(fixture)
         // ASSERT
         response.Should().NotBeNull();
         response.Id.Should().Be(newUser.Id);
+    }
+
+    [Fact]
+    public async Task UserRepository_UserExists_UserDoesntExist_ShouldReturnFalse()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var userRepository = new UserRepository(fixture.DbContext);
+        
+        // ACT
+        var response = await userRepository.UserExists(user.Id);
+        
+        // ASSERT
+        response.Should().BeFalse();
+    }
+    
+    [Fact]
+    public async Task UserRepository_UserExists_UserExists_ShouldReturnTrue()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var collection = fixture.DbContext.Users;
+        await collection.InsertOneAsync(user);
+        
+        // ACT
+        var response = await userRepository.UserExists(user.Id);
+        
+        // ASSERT
+        response.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task UserRepository_GetUserByEmailOrUsername_WhenUserDoesntExist_ShouldReturnNull()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var userRepository = new UserRepository(fixture.DbContext);
+        
+        // ACT
+        var response = await userRepository.GetUserByEmailOrUsername(user.Email, user.Username);
+        
+        // ASSERT
+        response.Should().BeNull();
+    }
+    
+    [Fact]
+    public async Task UserRepository_GetUserByEmailOrUsername_WhenUserExists_ShouldReturnTrue()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var userRepository = new UserRepository(fixture.DbContext);
+        var collection = fixture.DbContext.Users;
+        await collection.InsertOneAsync(user);
+        
+        // ACT
+        var response = await userRepository.GetUserByEmailOrUsername(user.Email, user.Username);
+        
+        // ASSERT
+        response.Should().NotBeNull();
+        response.Id.Should().Be(user.Id);
+        response.FirstName.Should().Be(user.FirstName);
+        response.LastName.Should().Be(user.LastName);
+    }
+
+    [Fact]
+    public async Task UserRepository_UpdateUserData_WhenNewUsernameIsProvided_ShouldReturnTrueOnSucess()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var oldUsername = user.Username;
+        const string newUsername = "Žižka";
+        var userRepository = new UserRepository(fixture.DbContext);
+        var collection = fixture.DbContext.Users;
+        await collection.InsertOneAsync(user);
+        
+        // ACT
+        var updateResponse = await userRepository.UpdateUserData(user.Id, "username", newUsername);
+        var userResponse = await userRepository.GetUser(user.Id);
+        
+        // ASSERT
+        updateResponse.Should().BeTrue();
+        userResponse.Should().NotBeNull();
+        userResponse.Username.Should().NotBe(oldUsername);
+        userResponse.Username.Should().Be(newUsername);
+    }
+    
+    
+    [Fact]
+    public async Task UserRepository_UpdateUserData_WhenNotificationsStructIsProvided_ShouldReturnTrueOnSucess()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var notificationStruct = new NotificationsStructBuilder().WithUser(user.Id).Build();
+        
+        var userRepository = new UserRepository(fixture.DbContext);
+        var usersCollection = fixture.DbContext.Users;
+        
+        var notificationsStructsCollection = fixture.DbContext.NotificationsStructs;
+        await usersCollection.InsertOneAsync(user);
+        await notificationsStructsCollection.InsertOneAsync(notificationStruct);
+        
+        // ACT
+        var updateResponse = await userRepository.UpdateUserData(user.Id, "notifications_struct", notificationStruct.Id);
+        var userResponse = await userRepository.GetUser(user.Id);
+        
+        // ASSERT
+        updateResponse.Should().BeTrue();
+        userResponse.Should().NotBeNull();
+        userResponse.NotificationsStructId.Should().NotBeNull();
+        userResponse.NotificationsStructId.Should().Be(notificationStruct.Id);
     }
 }

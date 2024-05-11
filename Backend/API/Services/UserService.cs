@@ -1,4 +1,5 @@
-﻿using API.Extensions;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Extensions;
 using API.Repository;
 using API.Services.Helpers;
 using MongoDB.Bson;
@@ -65,64 +66,19 @@ namespace API.Services
             return new ServiceResponse<bool>();
         }
 
-        public async Task<ServiceResponse<bool>> SendFriendRequest(NotificationDto notificationDto)
+        public Task<ServiceResponse<bool>> SendFriendRequest(NotificationDto notificationDto)
         {
-            try
-            {
-                var sender = await _userRepository.GetUser(notificationDto.SenderId);
-                if (sender == null)
-                {
-                    throw new UserNotFoundException("Sender account not found.");
-                }
-
-                var receiver = await _userRepository.GetUser(notificationDto.ReceiverId);
-                if (receiver == null)
-                {
-                    throw new UserNotFoundException("User not found.");
-                }
-
-                var newNotification = new Notification()
-                {
-                    Sender = sender.Id,
-                    Receiver = receiver.Id,
-                    CreatedAt = DateTime.Now,
-                    Message = $"{sender.Username} has sent you friend request",
-                    NotificationType = NotificationType.FriendRequest
-                };
-
-                var result =
-                    await _notificationRepository.CreateNotification(notificationDto.ReceiverId, newNotification);
-
-                if (!result)
-                {
-                    throw new ServiceException("Friend request couldn't be created, try again");
-                }
-
-                return new ServiceResponse<bool>
-                {
-                    Data = true,
-                    Message = "Friend request send."
-                };
-
-            }
-            catch (CustomException ex)
-            {
-                return new ServiceResponse<bool>
-                {
-                    StatusCode = ex.StatusCode,
-                    Success = false,
-                    Message = ex.Message
-                };
-            }
+            throw new NotImplementedException();
         }
+
 
         public async Task<ServiceResponse<List<User>>> GetUsers()
         {
             var users = await _userRepository.GetAllUsers();
-
+            
             return new ServiceResponse<List<User>>
             {
-                Data = users,
+                Data = users.Count == 0 ? null : users,
                 Success = (true)
             };
         }
@@ -211,7 +167,8 @@ namespace API.Services
                 return new ServiceResponse<bool>
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    StatusCode = ex.StatusCode
                 };
             }
         }

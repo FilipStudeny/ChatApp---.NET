@@ -31,4 +31,9 @@ public class Notification
     [BsonElement("created_at")] 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    [BsonElement("notification_struct")] 
+    public ObjectId NotificationsStruct { get; set; }
+
+    
 }
