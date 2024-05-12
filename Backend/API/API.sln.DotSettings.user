@@ -30,5 +30,9 @@
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotificationsStructByUserId_WhenStructIsFound_ShouldReturnStruct&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotification_WhenNotificationIsNotFound_ShouldReturnNull&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_GetNotification_WhenNotificationIsFound_ShouldReturnNotification&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsService_CreateNotificationsStruct_CreateNewStruct_ShouldReturnNewStruct&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_CreateNotification_CreateNewNotification_ShouldReturnUpdatedNotificationsStruct&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_DeleteNotification_WhenNotificationIsToBeDeleted_ShouldReturnListOfNotifications&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.Repositories.TestNotificationsRepository.NotificationsRepository_UpdateNotificationsStruct_WhenUserIsChanged_ShouldReturnStructWithNewUser&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

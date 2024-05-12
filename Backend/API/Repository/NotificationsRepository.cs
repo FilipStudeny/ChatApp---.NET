@@ -12,9 +12,11 @@ public interface INotificationsRepository
     public Task<NotificationsStruct?> GetNotificationsStructByUser(ObjectId userId);
     public Task<Notification?> GetNotification(ObjectId userOrNotificationsStructId,ObjectId notificationId);
     public Task<List<Notification>> GetNotifications(ObjectId userOrNotificationsStructId);
-    public Task CreateNotification(Notification notification);
-    public Task DeleteNotification(ObjectId notificationId);
-    public Task<bool> NotificationExists(ObjectId notificationId);
+    public Task CreateNotification(ObjectId userOrNotificationsStructId,Notification notification);
+    public Task<bool> DeleteNotification(ObjectId userOrNotificationsStructId, ObjectId notificationId);
+    public Task<bool> NotificationExists(ObjectId userOrNotificationsStructId, ObjectId notificationId);
+    public Task<NotificationsStruct> CreateNotificationsStruct(ObjectId userId);
+    public Task<bool> UpdateNotificationsStruct(ObjectId notificationsStructId, string fieldName, object newValue);
 }
 
 public class NotificationsRepository(MongoDbContext database) : INotificationsRepository
@@ -47,18 +49,65 @@ public class NotificationsRepository(MongoDbContext database) : INotificationsRe
         return notificationsStruct?.NotificationsList ?? [];
     }
 
-    public Task CreateNotification(Notification notification)
+    public async Task CreateNotification(ObjectId userOrNotificationsStructId, Notification notification)
     {
-        throw new NotImplementedException();
+        var notificationsStruct = (await GetNotificationsStructById(userOrNotificationsStructId) ??
+                                   await GetNotificationsStructByUser(userOrNotificationsStructId)) ?? 
+                                  await CreateNotificationsStruct(notification.Receiver);
+
+        notificationsStruct.NotificationsList.Add(notification);
+        notificationsStruct.NotificationsCount = notificationsStruct.NotificationsList.Count;
+
+        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", notificationsStruct.Id);
+        var update = Builders<NotificationsStruct>.Update
+            .Set("notifications", notificationsStruct.NotificationsList)
+            .Set("count", notificationsStruct.NotificationsCount);
+
+        await database.NotificationsStructs.UpdateOneAsync(filter, update);
+    }
+    public async Task<bool> DeleteNotification(ObjectId userOrNotificationsStructId, ObjectId notificationId)
+    {
+        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", userOrNotificationsStructId) &
+                     Builders<NotificationsStruct>.Filter.ElemMatch(
+                         ns => ns.NotificationsList,
+                         Builders<Notification>.Filter.Eq(n => n.Id, notificationId));
+
+        var update = Builders<NotificationsStruct>.Update
+            .PullFilter(ns => ns.NotificationsList, n => n.Id == notificationId)
+            .Inc(ns => ns.NotificationsCount, -1); // Decrement NotificationsCount by 1
+
+        var result = await database.NotificationsStructs.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0;
     }
 
-    public Task DeleteNotification(ObjectId notificationId)
+    public async Task<bool> NotificationExists(ObjectId userOrNotificationsStructId, ObjectId notificationId)
     {
-        throw new NotImplementedException();
+        var notifications = await GetNotifications(userOrNotificationsStructId);
+        var notification = notifications.Find(n => n.Id == notificationId);
+        return notification != null;
     }
 
-    public Task<bool> NotificationExists(ObjectId notificationId)
+    public async Task<NotificationsStruct> CreateNotificationsStruct(ObjectId userId)
     {
-        throw new NotImplementedException();
+        var newNotificationsStruct = new NotificationsStruct()
+        {
+            User = userId,
+            NotificationsCount = 0,
+            NotificationsList = []
+        };
+
+        await database.NotificationsStructs.InsertOneAsync(newNotificationsStruct);
+        return newNotificationsStruct;
+    }
+
+    public async Task<bool> UpdateNotificationsStruct(ObjectId notificationsStructId, string fieldName, object newValue)
+    {
+        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", notificationsStructId);
+        var update = Builders<NotificationsStruct>.Update.Set(fieldName, newValue);
+
+        var result = await database.NotificationsStructs.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0;
     }
 }
