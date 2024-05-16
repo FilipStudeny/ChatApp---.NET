@@ -17,6 +17,6 @@ public class NotificationsStruct
     public List<Notification> NotificationsList { get; set; } = [];
     
     [BsonElement("count")] public int NotificationsCount { get; set; } = 0;
-
+    
 }
 

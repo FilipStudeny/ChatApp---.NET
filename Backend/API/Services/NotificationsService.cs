@@ -12,7 +12,7 @@ public interface INotificationsService
     public Task<ServiceResponse<Notification>> GetNotification(ObjectId userId, ObjectId notificationId);
     public Task<ServiceResponse<List<Notification>>> GetUserNotifications(ObjectId userId);
     public Task<ServiceResponse<bool>> CreateNotification(NotificationDto notificationDto);
-    public Task<ServiceResponse<bool>> RemoveNotification(ObjectId userId, ObjectId notificationId);
+    public Task<ServiceResponse<bool>> DeleteNotification(ObjectId userId, ObjectId notificationId);
 }
 
 public class NotificationsService : INotificationsService
@@ -140,25 +140,31 @@ public class NotificationsService : INotificationsService
         }
     }
 
-    public async Task<ServiceResponse<bool>> RemoveNotification(ObjectId userId, ObjectId notificationId)
+    public async Task<ServiceResponse<bool>> DeleteNotification(ObjectId userId, ObjectId notificationId)
     {
         try
         {
-            var sender = await _userRepository.UserExists(userId);
-            if (sender == false)
+            var userExists = await _userRepository.UserExists(userId);
+            if (userExists == false)
             {
                 throw new UserNotFoundException("Couldn't find user, try again.");
             }
 
-            var deleted = await _notificationsRepository.DeleteNotification(userId, notificationId);
-            if (deleted)
+            var notificationExists = await _notificationsRepository.NotificationExists(userId, notificationId);
+            if (notificationExists == false)
             {
-                return new ServiceResponse<bool>() { Data = true };
+                throw new UserNotFoundException("Couldn't find notification, try again.");
+            }
+
+            var deleted = await _notificationsRepository.DeleteNotification(userId, notificationId);
+            if (deleted == false)
+            {
+                return new ServiceResponse<bool>() { Data = false };
             }
             
             return new ServiceResponse<bool>()
             {
-                Data = false
+                Data = true
             };
 
         }

@@ -67,19 +67,26 @@ public class NotificationsRepository(MongoDbContext database) : INotificationsRe
     }
     public async Task<bool> DeleteNotification(ObjectId userOrNotificationsStructId, ObjectId notificationId)
     {
-        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", userOrNotificationsStructId) &
-                     Builders<NotificationsStruct>.Filter.ElemMatch(
-                         ns => ns.NotificationsList,
-                         Builders<Notification>.Filter.Eq(n => n.Id, notificationId));
+        var notificationsStruct = (await GetNotificationsStructById(userOrNotificationsStructId) ??
+                                   await GetNotificationsStructByUser(userOrNotificationsStructId));
 
+        var notificationToRemove = notificationsStruct?.NotificationsList.Find(n => n.Id == notificationId);
+        if (notificationToRemove != null)
+        {
+            notificationsStruct?.NotificationsList.Remove(notificationToRemove);
+            notificationsStruct.NotificationsCount--;
+        }
+        
+        var filter = Builders<NotificationsStruct>.Filter.Eq("_id", notificationsStruct?.Id);
         var update = Builders<NotificationsStruct>.Update
-            .PullFilter(ns => ns.NotificationsList, n => n.Id == notificationId)
-            .Inc(ns => ns.NotificationsCount, -1); // Decrement NotificationsCount by 1
-
+            .Set("notifications", notificationsStruct?.NotificationsList)
+            .Set("count", notificationsStruct?.NotificationsCount);
+        
         var result = await database.NotificationsStructs.UpdateOneAsync(filter, update);
 
         return result.ModifiedCount > 0;
     }
+
 
     public async Task<bool> NotificationExists(ObjectId userOrNotificationsStructId, ObjectId notificationId)
     {
