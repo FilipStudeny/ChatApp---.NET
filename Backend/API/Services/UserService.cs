@@ -16,7 +16,7 @@ namespace API.Services
         public Task<ServiceResponse<string>> Login(LoginDto loginDto);
         public Task<ServiceResponse<List<User>>> GetUsers();
         public Task<ServiceResponse<User>> GetUser(ObjectId id);
-        public Task<ServiceResponse<bool>> AddFriend(NotificationDto notificationDto);
+        public Task<ServiceResponse<bool>> AddFriend(ObjectId notificationId, ObjectId newFriendId);
         public Task<ServiceResponse<bool>> SendFriendRequest(NotificationDto notificationDto);
     }
 
@@ -24,13 +24,13 @@ namespace API.Services
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
-        private readonly INotificationsRepository _notificationRepository;
+        private readonly INotificationsService _notificationsService;
 
-        public UserService(IAuthenticationService authenticationService, IUserRepository userRepository, INotificationsRepository notificationRepository)
+        public UserService(IAuthenticationService authenticationService, IUserRepository userRepository, INotificationsService notificationsService)
         {
             _authenticationService = authenticationService;
             _userRepository = userRepository;
-            _notificationRepository = notificationRepository;
+            _notificationsService = notificationsService;
         }
         
         public async Task<ServiceResponse<User>> GetUser(ObjectId id)
@@ -61,14 +61,106 @@ namespace API.Services
 
         }
 
-        public async Task<ServiceResponse<bool>> AddFriend(NotificationDto notificationDto)
+        public async Task<ServiceResponse<bool>> AddFriend(ObjectId notificationId, ObjectId newFriendId)
         {
-            return new ServiceResponse<bool>();
+            try
+            {
+                var userId = _authenticationService.GetUserIdFromToken();
+                var userExists = await _userRepository.UserExists(userId);
+                if (!userExists)
+                {
+                    throw new UserNotFoundException(Messages.UserNotFound);
+                }
+
+                var newFriendExists = await _userRepository.UserExists(newFriendId);
+                if (!newFriendExists)
+                {
+                    throw new UserNotFoundException(Messages.UserNotFound);
+                }
+
+                await _notificationsService.NotificationExists(userId, notificationId);
+                
+                var user = await _userRepository.GetUser(userId);
+                var newFriend = await _userRepository.GetUser(newFriendId);
+
+                var friendToUser = new Friend()
+                {
+                    Id = newFriend.Id,
+                    Username = newFriend.Username
+                };
+
+                var userToFriend = new Friend()
+                {
+                    Id = user.Id,
+                    Username = user.Username
+                };
+
+                await _userRepository.AddFriend(user.Id, friendToUser);
+                await _userRepository.AddFriend(newFriend.Id, userToFriend);
+                await _notificationsService.DeleteNotification(newFriend.Id, notificationId);
+
+                return new ServiceResponse<bool>() { Data = true, Message = "Friend request accepted." };
+            }
+            catch (CustomException ex)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    StatusCode = ex.StatusCode,
+                    Success = false,
+                    Message = ex.Message
+                };
+            }        
         }
 
-        public Task<ServiceResponse<bool>> SendFriendRequest(NotificationDto notificationDto)
+        public async Task<ServiceResponse<bool>> SendFriendRequest(NotificationDto notificationDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var senderExists = await _userRepository.UserExists(notificationDto.SenderId.Value);
+                if (!senderExists)
+                {
+                    throw new UserNotFoundException("Sender not found");
+                }
+
+                var receiverExists = await _userRepository.UserExists(notificationDto.ReceiverId.Value);
+                if (!receiverExists)
+                {
+                    throw new UserNotFoundException("Receiver not found");
+                }
+
+                var sender = await _userRepository.GetUser(notificationDto.SenderId.Value);
+                var receiver = await _userRepository.GetUser(notificationDto.ReceiverId.Value);
+
+                var notification = new Notification()
+                {
+                    Sender = sender.Id,
+                    Receiver = receiver.Id,
+                    Message = Messages.GenerateFriendRequestMessage(sender.Username),
+                    CreatedAt = DateTime.Now,
+                    NotificationsStruct = receiver.NotificationsStructId,
+                    NotificationType = NotificationType.FriendRequest
+                };
+
+                var response = await _notificationsService.CreateNotification(notification);
+                if (response.Success)
+                {
+                    return new ServiceResponse<bool>() { Data = true, Message = Messages.FriendRequestSent};
+                }
+
+                throw new ServiceException(Messages.CouldNotSendFriendRequest);
+
+            }
+            catch (CustomException ex)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    StatusCode = ex.StatusCode,
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
         }
 
 
@@ -147,19 +239,13 @@ namespace API.Services
                     LastActivity = DateTime.UtcNow
                 };
 
-                // Insert the newUser into the database
                 await _userRepository.CreateUser(newUser);
-
-                // Now retrieve the newUser's ID after insertion
                 var userId = newUser.Id;
-
-                // Use the userId as needed
-
                 var structS = new NotificationsStruct()
                 {
                     User = userId,
                 };
-
+                
                 return new ServiceResponse<bool> { Data = true, Message = "Account created." };
             }
             catch (CustomException ex)

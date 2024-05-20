@@ -16,6 +16,7 @@ namespace API.Repository
         public Task<bool> UserExists(ObjectId id);
         public Task<bool> UserExists(string email, string username);
         public Task<bool> UpdateUserData(ObjectId userId, string fieldName, object newValue);
+        public Task<bool> AddFriend(ObjectId userId, Friend friend);
     }
 
     public class UserRepository(MongoDbContext database) : IUserRepository
@@ -71,6 +72,15 @@ namespace API.Repository
 
             var result = await database.Users.UpdateOneAsync(filter, update);
 
+            return result.ModifiedCount > 0;
+        }
+        
+        public async Task<bool> AddFriend(ObjectId userId, Friend friend)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Push(u => u.Friends, friend);
+
+            var result = await database.Users.UpdateOneAsync(filter, update);
             return result.ModifiedCount > 0;
         }
     }

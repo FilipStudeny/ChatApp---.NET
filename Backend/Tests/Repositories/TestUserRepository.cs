@@ -212,4 +212,32 @@ public class TestUserRepository(MongoDbFixture fixture) : TestBase(fixture)
         userResponse.NotificationsStructId.Should().NotBeNull();
         userResponse.NotificationsStructId.Should().Be(notificationStruct.Id);
     }
+    
+    [Fact]
+    public async Task UserRepository_AddFriend_WhenNewFriendIsAdded_ShouldReturnTrueOnSucess()
+    {
+        // ARRANGE
+        var user = new UserBuilder().Build();
+        var friend = new UserBuilder().Build();
+        var newFriend = new Friend()
+        {
+            Id = friend.Id,
+            Username = friend.Username
+        };
+        
+        var userRepository = new UserRepository(fixture.DbContext);
+        var usersCollection = fixture.DbContext.Users;
+        await usersCollection.InsertOneAsync(user);
+        
+        // ACT
+        var updateResponse = await userRepository.AddFriend(user.Id, newFriend);
+        var userResponse = await userRepository.GetUser(user.Id);
+        
+        // ASSERT
+        updateResponse.Should().BeTrue();
+        userResponse.Should().NotBeNull();
+        userResponse.NotificationsStructId.Should().NotBeNull();
+        userResponse.Friends.Should().HaveCount(1);
+        userResponse.Friends.First().Username.Should().Be(friend.Username);
+    }
 }

@@ -47,5 +47,13 @@
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceDeleteNotification.NotificationsService_DeleteNotification_WhenNotificationDoesntExist_ShouldReturnException&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceDeleteNotification.NotificationsService_DeleteNotification_WhenNotificationExist_ShouldReturnTrue&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceDeleteNotification.NotificationsRepository_CreateNotificationsStruct_ShouldReturnNewStruct&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceCreateNotification&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceSendFriendRequest.UserService_SendFriendRequest_WhenSenderDoesntExist_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceSendFriendRequest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceNotificationExists.NotificationsService_NotificationExists_WhenNotificationDoesntExist_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.NotificationsService.TestNotificationsServiceNotificationExists.NotificationsService_NotificationExists_WhenNotificationExist_ShouldReturnTrue&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceAddFriend.UserService_AddFriend_WhenUserNotFound_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceAddFriend.UserService_AddFriend_WhenFriendNotFound_ShouldReturnException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::AB3250B0-2ABA-41E2-B53F-16AD168CD67D::net8.0::Tests.UserService.TestUserServiceAddFriend.UserService_AddFriend_WhenRequestSatisfied_ShouldReturnTrue&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

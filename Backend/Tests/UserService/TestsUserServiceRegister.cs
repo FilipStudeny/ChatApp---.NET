@@ -37,9 +37,9 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         var collection = fixture.DbContext.Users;
         await collection.InsertOneAsync(user);
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var notificationService = Substitute.For<INotificationsService>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         
         // ACT
         var response = await userService.Register(registerDto);
@@ -67,9 +67,9 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
             ProfilePicture = "picture"
         };
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         
         // ACT
         var response = await userService.Register(registerDto);
@@ -98,9 +98,9 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
             ProfilePicture = "picture"
         };
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var notificationService = Substitute.For<INotificationsService>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
 
         // ACT
         var response = await userService.Register(registerDto);
@@ -130,9 +130,9 @@ public class TestsUserServiceRegister(MongoDbFixture fixture) : TestBase(fixture
         };
         
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
+        var notificationService = Substitute.For<INotificationsService>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         authenticationService.CreatePasswordHash(registerDto.Password)
             .Returns(callInfo =>
             {

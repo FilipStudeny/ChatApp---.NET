@@ -16,9 +16,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
         // ARRANGE
         var user = new UserBuilder().Build();
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         
         // ACT
         var response = await userService.GetUser(user.Id);
@@ -38,9 +38,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
         await collection.InsertOneAsync(user);
         
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         
         // ACT
         var response = await userService.GetUser(user.Id);
@@ -59,9 +59,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
     {
         // ARRANGE
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
 
         // ACT
         var response = await userService.GetUsers();
@@ -80,9 +80,9 @@ public class TestUserServiceGetUsers(MongoDbFixture fixture) : TestBase(fixture)
         await collection.InsertManyAsync([user, user2]);
         
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
 
         // ACT
         var response = await userService.GetUsers();

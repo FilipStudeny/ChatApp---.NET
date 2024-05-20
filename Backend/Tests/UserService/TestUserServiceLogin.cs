@@ -26,9 +26,9 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
         };
         
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         
         // ACT
         var response = await userService.Login(loginDto);
@@ -53,9 +53,9 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
         await collection.InsertOneAsync(user);
 
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         authenticationService.VerifyPasswordHash(loginDto.Password, Arg.Any<byte[]>(), Arg.Any<byte[]>())
             .Returns(false);
         
@@ -82,9 +82,9 @@ public class TestUserServiceLogin(MongoDbFixture fixture) : TestBase(fixture)
         await collection.InsertOneAsync(user);
 
         var authenticationService = Substitute.For<IAuthenticationService>();
-        var notificationsRepository = Substitute.For<INotificationsRepository>();
         var userRepository = new UserRepository(fixture.DbContext);
-        var userService = new API.Services.UserService(authenticationService, userRepository, notificationsRepository);
+        var notificationService = Substitute.For<INotificationsService>();
+        var userService = new API.Services.UserService(authenticationService, userRepository, notificationService);
         authenticationService.VerifyPasswordHash(loginDto.Password, Arg.Any<byte[]>(), Arg.Any<byte[]>())
             .Returns(true);
         authenticationService.CreateToken(Arg.Any<User>()).Returns("dummy_token");

@@ -11,8 +11,10 @@ public interface INotificationsService
 {
     public Task<ServiceResponse<Notification>> GetNotification(ObjectId userId, ObjectId notificationId);
     public Task<ServiceResponse<List<Notification>>> GetUserNotifications(ObjectId userId);
-    public Task<ServiceResponse<bool>> CreateNotification(NotificationDto notificationDto);
+    public Task<ServiceResponse<bool>> CreateNotification(Notification notification);
     public Task<ServiceResponse<bool>> DeleteNotification(ObjectId userId, ObjectId notificationId);
+
+    public Task<ServiceResponse<bool>> NotificationExists(ObjectId userOrNotificationsStructId, ObjectId notificationId);
 }
 
 public class NotificationsService : INotificationsService
@@ -91,36 +93,11 @@ public class NotificationsService : INotificationsService
         }
     }
 
-    public async Task<ServiceResponse<bool>> CreateNotification(NotificationDto notificationDto)
+    public async Task<ServiceResponse<bool>> CreateNotification(Notification notification)
     {
         try
         {
-            var sender = await _userRepository.UserExists(notificationDto.SenderId.Value);
-            if (sender == false)
-            {
-                throw new UserNotFoundException("Your account doesn't exist, create one.");
-            }
-
-            var receiver = await _userRepository.UserExists(notificationDto.ReceiverId.Value);
-            if (receiver == false)
-            {
-                throw new UserNotFoundException("Couldn't find user, try again.");
-            }
-            
-            var notificationStruct = await _notificationsRepository.GetNotificationsStructByUser(notificationDto.ReceiverId.Value) ??
-                                     await _notificationsRepository.CreateNotificationsStruct(notificationDto.ReceiverId.Value);
-
-            var notification = new Notification()
-            {
-                CreatedAt = DateTime.Now,
-                Message = notificationDto.Message,
-                NotificationsStruct = notificationStruct.Id,
-                Sender = notificationDto.SenderId.Value,
-                Receiver = notificationDto.ReceiverId.Value,
-                NotificationType = notificationDto.NotificationType.Value
-            };
-
-            await _notificationsRepository.CreateNotification(notificationDto.ReceiverId.Value,notification);
+            await _notificationsRepository.CreateNotification(notification.Receiver, notification);
 
             return new ServiceResponse<bool>()
             {
@@ -179,4 +156,27 @@ public class NotificationsService : INotificationsService
             };
         }
     }
+
+    public async Task<ServiceResponse<bool>> NotificationExists(ObjectId userOrNotificationsStructId, ObjectId notificationId)
+    {
+        try
+        {
+            var exists = await _notificationsRepository.NotificationExists(userOrNotificationsStructId, notificationId);
+            if (exists)
+            {
+                return new ServiceResponse<bool>() { Data = true };
+            }
+
+            throw new DatabaseException(Messages.GenerateNotFoundMessage("Notification"));
+        }
+        catch (CustomException ex)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                StatusCode = ex.StatusCode,
+                Success = false,
+                Message = ex.Message
+            };
+        }    }
 }
