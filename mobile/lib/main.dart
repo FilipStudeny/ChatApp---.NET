@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/FeedPage.dart';
+import 'package:mobile/pages/RegisterPage.dart';
 import 'constants/ThemeSchema.dart';
+import 'pages/LoginPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,63 +16,59 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: themeSchema,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: HomePage.route,
+      routes: {
+        HomePage.route: (context) => const HomePage(title: "hOMEpAGE"),
+        LoginPage.route: (context) => const LoginPage(),
+        RegisterPage.route: (context) => const RegisterPage(),
+        FeedPage.route: (context) => const FeedPage()
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
+  static const String route = 'home';
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.title,
-        ),
+        title: const Text("Chat app - home page"),
       ),
-      body: Center(
-        child: Column(
+      body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-            ),
-            ElevatedButton(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
               onPressed: () {
-                // Define what happens when the button is pressed
-                print('Button Pressed!');
+                Navigator.pushNamed(context, LoginPage.route);
               },
-              child: Text(
-                'Press Me',
-              ),
+              child: const Text("Sign in"),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RegisterPage.route);
+              },
+              child: const Text("Create account"),
+            ),
+          ),
+        ]
+
       ),
     );
   }
